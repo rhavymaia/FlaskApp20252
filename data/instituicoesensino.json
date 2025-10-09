@@ -1,0 +1,65 @@
+[
+  {
+    "codigo": "25000012",
+    "nome": "EMEF JOAO ALVES",
+    "co_uf": "25",
+    "co_municipio": "2501005",
+    "qt_mat_bas": 779,
+    "qt_mat_prof": 0,
+    "qt_mat_esp": 43
+  },
+  {
+    "codigo": "25000020",
+    "nome": "CRECHE INTEGRADA MARIA DO SOCORRO LINHARES",
+    "co_uf": "25",
+    "co_municipio": "2502003",
+    "qt_mat_bas": 0,
+    "qt_mat_prof": 0,
+    "qt_mat_esp": 0
+  },
+  {
+    "codigo": "25000047",
+    "nome": "ECI NOSSA SENHORA DA CONCEICAO",
+    "co_uf": "25",
+    "co_municipio": "2502003",
+    "qt_mat_bas": 116,
+    "qt_mat_prof": 0,
+    "qt_mat_esp": 2
+  },
+  {
+    "codigo": "25000055",
+    "nome": "EEEFM AMERICO MAIA",
+    "co_uf": "25",
+    "co_municipio": "2502003",
+    "qt_mat_bas": 242,
+    "qt_mat_prof": 0,
+    "qt_mat_esp": 6
+  },
+  {
+    "codigo": "25000063",
+    "nome": "EMEIF PREFEITO PLINIO FORTE MAIA",
+    "co_uf": "25",
+    "co_municipio": "2502003",
+    "qt_mat_bas": 266,
+    "qt_mat_prof": 0,
+    "qt_mat_esp": 11
+  },
+  {
+    "codigo": "25000110",
+    "nome": "ESC MUL FRANCISCO DA CUNHA",
+    "co_uf": "25",
+    "co_municipio": "2502003",
+    "qt_mat_bas": 180,
+    "qt_mat_prof": 0,
+    "qt_mat_esp": 11
+  },
+  {
+    "codigo": "25000160",
+    "nome": "ESCOLA MEIF PROFESSOR RAIMUNDO SEVERINO ANDRADE",
+    "co_uf": "25",
+    "co_municipio": "2502003",
+    "qt_mat_bas": 177,
+    "qt_mat_prof": 0,
+    "qt_mat_esp": 8
+  }
+]

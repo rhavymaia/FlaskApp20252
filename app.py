@@ -1,13 +1,15 @@
 from flask import Flask, request, jsonify
-from models.InstituicaoEnsino import InstituicaoEnsino
+
+from models.Usuario import Usuario
+from helpers.data import getInstituicoesEnsino
 
 app = Flask(__name__)
 
-usuarios = [{'nome': 'João'}]
+usuario = Usuario(1, "João", "00011122233", "2025-10-09")
+usuarios = [usuario]
 
-ie = InstituicaoEnsino("25000012", "EMEF JOAO ALVES",
-                       25, "2501005", 779, 0, 104, 43)
-instituicoesEnsino = [ie]
+# Instituições de Ensino.
+instituicoesEnsino = getInstituicoesEnsino()
 
 
 @app.get("/")
@@ -37,10 +39,15 @@ def setUsuarios():
 
 @app.get("/instituicoesensino")
 def getInstituicoesEnsino():
-    return instituicoesEnsino, 200
+    instituicoesEnsinoJson = [instituicaoEnsino.to_json()
+                              for instituicaoEnsino in instituicoesEnsino]
+    return jsonify(instituicoesEnsinoJson), 200
 
 
 @app.get("/instituicoesensino/<int:id>")
 def getInstituicoesEnsinoById(id: int):
     ieDict = instituicoesEnsino[id].to_json()
     return jsonify(ieDict), 200
+
+
+# todo: entregar endpoints completos de IE e Usuarios.

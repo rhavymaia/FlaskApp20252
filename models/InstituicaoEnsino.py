@@ -11,7 +11,7 @@ class InstituicaoEnsino():
         self.qt_mat_esp = qt_mat_esp
 
     def __repr__(self):
-        return ''
+        return f'<InstituicaoEnsino {self.codigo}>'
 
     def to_json(self):
         return {"codigo": self.codigo, "nome": self.nome}
