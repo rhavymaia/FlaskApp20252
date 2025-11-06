@@ -1,3 +1,4 @@
+import sqlite3
 from flask import Flask, request, jsonify
 
 from models.Usuario import Usuario
@@ -10,6 +11,8 @@ usuarios = [usuario]
 
 # Instituições de Ensino.
 instituicoesEnsino = getInstituicoesEnsino()
+
+DATABASE_NAME = "censoescolar.db"
 
 
 @app.get("/")
@@ -39,9 +42,31 @@ def setUsuarios():
 
 @app.get("/instituicoesensino")
 def getInstituicoesEnsino():
-    instituicoesEnsinoJson = [instituicaoEnsino.to_json()
-                              for instituicaoEnsino in instituicoesEnsino]
-    return jsonify(instituicoesEnsinoJson), 200
+    # conectar com o banco.
+    conn = sqlite3.connect(DATABASE_NAME)
+
+    # capturar o cursor
+    cursor = conn.cursor()
+
+    # consultar: execução da dml.
+    statement = "SELECT * FROM tb_instituicao"
+    cursor.execute(statement)
+
+    # fetch
+    resultset = cursor.fetchall()
+
+    instituicaoEnsinoResponse = []
+    for row in resultset:
+        id = row[0]
+        codigo = row[1]
+        nome = row[2]
+        instituicaoEnsino = {"id": id, "codigo": codigo, "nome": nome}
+        instituicaoEnsinoResponse.append(instituicaoEnsino)
+
+    # fechar a conexão
+    conn.close()
+
+    return instituicaoEnsinoResponse, 200
 
 
 @app.get("/instituicoesensino/<int:id>")
