@@ -1,5 +1,6 @@
 import sqlite3
 from flask import Flask, request, jsonify
+from datetime import datetime
 
 from models.Usuario import Usuario
 from helpers.data import getInstituicoesEnsino
@@ -13,6 +14,14 @@ usuarios = [usuario]
 instituicoesEnsino = getInstituicoesEnsino()
 
 DATABASE_NAME = "censoescolar.db"
+
+
+def is_data_valida(data_string):
+    try:
+        datetime.strptime(data_string, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
 
 
 @app.get("/")
@@ -31,11 +40,41 @@ def getUsuariosById(id: int):
 
 
 @app.post("/usuarios")
-def setUsuarios():
-    data = request.get_json()
+def setUsuario():
+    usuarioJson = request.get_json()
 
-    usuario = {"nome": data['nome']}
-    usuarios.append(usuario)
+    # Validação simples sem framework dos dados do usuário.
+    nome = usuarioJson['nome']
+    if (len(nome) <= 0 or (len(nome) > 0 and not (nome.isalpha()))):
+        return {"mensagem": "O nome do usuário é inválido!"}, 400
+
+    cpf = usuarioJson['cpf']
+    if (len(cpf) == 11):
+        return {"mensagem": "O cpf do usuário é inválido!"}, 400
+
+    nascimento = usuarioJson['nascimento']
+    datetime.strptime(nascimento, )
+    if (is_data_valida(nascimento)):
+        return {"mensagem": "A data de nascimento do usuário é inválida!"}, 400
+
+    # Manipulação com o banco de dados.
+    # conectar com o banco.
+    conn = sqlite3.connect(DATABASE_NAME)
+
+    # capturar o cursor
+    cursor = conn.cursor()
+
+    # consultar: execução da dml.
+    statement = "INSERT INTO tb_instituicao(nome, cpf, nascimento) values(?, ?, ?)"
+    cursor.execute(statement, (nome, cpf, nascimento))
+
+    id = cursor.lastrowid
+
+    # Commit - Confirma transação.
+    cursor.commit()
+
+    # Adicionar id do registro criado ao usuário de rotorno.
+    usuarioJson.update({"id": id})
 
     return usuario, 201
 
@@ -73,6 +112,3 @@ def getInstituicoesEnsino():
 def getInstituicoesEnsinoById(id: int):
     ieDict = instituicoesEnsino[id].to_json()
     return jsonify(ieDict), 200
-
-
-# todo: entregar endpoints completos de IE e Usuarios.
