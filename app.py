@@ -1,9 +1,11 @@
 import sqlite3
 from flask import Flask, request, jsonify
+from marshmallow import ValidationError
 from datetime import datetime
 
-from models.Usuario import Usuario
+from models.Usuario import Usuario, UsuarioSchema
 from helpers.data import getInstituicoesEnsino
+
 
 app = Flask(__name__)
 
@@ -41,42 +43,41 @@ def getUsuariosById(id: int):
 
 @app.post("/usuarios")
 def setUsuario():
-    usuarioJson = request.get_json()
 
-    # Validação simples sem framework dos dados do usuário.
-    nome = usuarioJson['nome']
-    if (len(nome) <= 0 or (len(nome) > 0 and not (nome.isalpha()))):
-        return {"mensagem": "O nome do usuário é inválido!"}, 400
+    try:
+        usuarioJson = request.get_json()
 
-    cpf = usuarioJson['cpf']
-    if (len(cpf) == 11):
-        return {"mensagem": "O cpf do usuário é inválido!"}, 400
+        usuarioSchema = UsuarioSchema()
 
-    nascimento = usuarioJson['nascimento']
-    datetime.strptime(nascimento, )
-    if (is_data_valida(nascimento)):
-        return {"mensagem": "A data de nascimento do usuário é inválida!"}, 400
+        usuarioData = usuarioSchema.load(usuarioJson)
 
-    # Manipulação com o banco de dados.
-    # conectar com o banco.
-    conn = sqlite3.connect(DATABASE_NAME)
+        # Manipulação com o banco de dados.
+        # conectar com o banco.
+        conn = sqlite3.connect(DATABASE_NAME)
 
-    # capturar o cursor
-    cursor = conn.cursor()
+        # capturar o cursor
+        cursor = conn.cursor()
 
-    # consultar: execução da dml.
-    statement = "INSERT INTO tb_instituicao(nome, cpf, nascimento) values(?, ?, ?)"
-    cursor.execute(statement, (nome, cpf, nascimento))
+        nome = usuarioData['nome']
+        cpf = usuarioData['cpf']
+        nascimento = usuarioData['nascimento']
 
-    id = cursor.lastrowid
+        # consultar: execução da dml.
+        statement = "INSERT INTO tb_instituicao(nome, cpf, nascimento) values(?, ?, ?)"
+        cursor.execute(statement, (nome, cpf, nascimento))
 
-    # Commit - Confirma transação.
-    cursor.commit()
+        id = cursor.lastrowid
 
-    # Adicionar id do registro criado ao usuário de rotorno.
-    usuarioJson.update({"id": id})
+        # Commit - Confirma transação.
+        cursor.commit()
 
-    return usuario, 201
+        # Adicionar id do registro criado ao usuário de rotorno.
+        usuarioJson.update({"id": id})
+
+        return usuario, 201
+
+    except ValidationError as err:
+        return err.messages, 400
 
 
 @app.get("/instituicoesensino")
