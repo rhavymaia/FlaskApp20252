@@ -24,7 +24,6 @@ class UsuarioSchema(Schema):
                              error_messages={"required": "A Data de Nascimento do Usuário é obrigatória."})
 
 
-print(__name__)
 if __name__ == "__main__":
     usuario = Usuario(1, "João", "00011122233", "2025-10-09")
     print(usuario)

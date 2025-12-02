@@ -5,7 +5,7 @@ from datetime import datetime
 
 from models.Usuario import Usuario, UsuarioSchema
 from helpers.data import getInstituicoesEnsino
-
+from helpers.logging import logger
 
 app = Flask(__name__)
 
@@ -44,6 +44,7 @@ def getUsuariosById(id: int):
 @app.post("/usuarios")
 def setUsuario():
 
+    logger.info("get - /usuarios")
     try:
         usuarioJson = request.get_json()
 
@@ -61,6 +62,7 @@ def setUsuario():
         nome = usuarioData['nome']
         cpf = usuarioData['cpf']
         nascimento = usuarioData['nascimento']
+        logger.info(f"{nome} - {cpf} - {nascimento}")
 
         # consultar: execução da dml.
         statement = "INSERT INTO tb_instituicao(nome, cpf, nascimento) values(?, ?, ?)"
@@ -78,6 +80,8 @@ def setUsuario():
 
     except ValidationError as err:
         return err.messages, 400
+    except sqlite3.Error as e:
+        logger.error(f"An SQLite error occurred: {e}")
 
 
 @app.get("/instituicoesensino")
