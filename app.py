@@ -1,29 +1,11 @@
 import sqlite3
-from flask import Flask, request, jsonify
+from flask import request
 from marshmallow import ValidationError
-from datetime import datetime
 
-from models.Usuario import Usuario, UsuarioSchema
-from helpers.data import getInstituicoesEnsino
+from models.Usuario import UsuarioSchema
+from helpers.application import app
+from helpers.database import get_conn
 from helpers.logging import logger
-
-app = Flask(__name__)
-
-usuario = Usuario(1, "João", "00011122233", "2025-10-09")
-usuarios = [usuario]
-
-# Instituições de Ensino.
-instituicoesEnsino = getInstituicoesEnsino()
-
-DATABASE_NAME = "censoescolar.db"
-
-
-def is_data_valida(data_string):
-    try:
-        datetime.strptime(data_string, '%Y-%m-%d')
-        return True
-    except ValueError:
-        return False
 
 
 @app.get("/")
@@ -33,12 +15,12 @@ def index():
 
 @app.get("/usuarios")
 def getUsuarios():
-    return jsonify(usuarios)
+    return {}, 501
 
 
 @app.get("/usuarios/<int:id>")
 def getUsuariosById(id: int):
-    return jsonify(usuarios[id])
+    return {}, 501
 
 
 @app.post("/usuarios")
@@ -54,7 +36,7 @@ def setUsuario():
 
         # Manipulação com o banco de dados.
         # conectar com o banco.
-        conn = sqlite3.connect(DATABASE_NAME)
+        conn = get_conn()
 
         # capturar o cursor
         cursor = conn.cursor()
@@ -66,6 +48,7 @@ def setUsuario():
 
         # consultar: execução da dml.
         statement = "INSERT INTO tb_instituicao(nome, cpf, nascimento) values(?, ?, ?)"
+
         cursor.execute(statement, (nome, cpf, nascimento))
 
         id = cursor.lastrowid
@@ -76,44 +59,48 @@ def setUsuario():
         # Adicionar id do registro criado ao usuário de rotorno.
         usuarioJson.update({"id": id})
 
-        return usuario, 201
+        return usuarioJson, 201
 
     except ValidationError as err:
         return err.messages, 400
     except sqlite3.Error as e:
         logger.error(f"An SQLite error occurred: {e}")
+        return {"mensagem": "Problema na operação com os dados"}, 500
 
 
 @app.get("/instituicoesensino")
 def getInstituicoesEnsino():
-    # conectar com o banco.
-    conn = sqlite3.connect(DATABASE_NAME)
 
-    # capturar o cursor
-    cursor = conn.cursor()
+    logger.info("get - /instituicoesensino")
+    try:
+        # conectar com o banco.
+        conn = get_conn()
 
-    # consultar: execução da dml.
-    statement = "SELECT * FROM tb_instituicao"
-    cursor.execute(statement)
+        # capturar o cursor
+        cursor = conn.cursor()
 
-    # fetch
-    resultset = cursor.fetchall()
+        # consultar: execução da dml.
+        statement = "SELECT * FROM tb_instituicao"
+        cursor.execute(statement)
 
-    instituicaoEnsinoResponse = []
-    for row in resultset:
-        id = row[0]
-        codigo = row[1]
-        nome = row[2]
-        instituicaoEnsino = {"id": id, "codigo": codigo, "nome": nome}
-        instituicaoEnsinoResponse.append(instituicaoEnsino)
+        # fetch
+        resultset = cursor.fetchall()
 
-    # fechar a conexão
-    conn.close()
+        instituicoesEnsinoResponse = []
+        for row in resultset:
+            id = row["id"]
+            codigo = row["codigo"]
+            nome = row["nome"]
+            instituicaoEnsino = {"id": id, "codigo": codigo, "nome": nome}
+            instituicoesEnsinoResponse.append(instituicaoEnsino)
 
-    return instituicaoEnsinoResponse, 200
+        return instituicoesEnsinoResponse, 200
+
+    except sqlite3.Error as e:
+        logger.error(f"An SQLite error occurred: {e}")
+        return {"mensagem": "Problema na operação com os dados"}, 500
 
 
 @app.get("/instituicoesensino/<int:id>")
 def getInstituicoesEnsinoById(id: int):
-    ieDict = instituicoesEnsino[id].to_json()
-    return jsonify(ieDict), 200
+    return {}, 501
