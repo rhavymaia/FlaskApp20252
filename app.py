@@ -15,7 +15,36 @@ def index():
 
 @app.get("/usuarios")
 def getUsuarios():
-    return {}, 501
+    logger.info("get - /usuarios")
+    try:
+        # conectar com o banco.
+        conn = get_conn()
+
+        # capturar o cursor
+        cursor = conn.cursor()
+
+        # consultar: execução da dml.
+        statement = "SELECT * FROM tb_usuario"
+        cursor.execute(statement)
+
+        # fetch
+        resultset = cursor.fetchall()
+
+        usuariosEnsinoResponse = []
+        for row in resultset:
+            id = row[0]
+            codigo = row[1]
+            nome = row[2]
+
+            instituicaoEnsino = {"id": id, "codigo": codigo, "nome": nome}
+
+            usuariosEnsinoResponse.append(instituicaoEnsino)
+
+        return usuariosEnsinoResponse, 200
+
+    except sqlite3.Error as e:
+        logger.error(f"An SQLite error occurred: {e}")
+        return {"mensagem": "Problema na operação com os dados"}, 500
 
 
 @app.get("/usuarios/<int:id>")

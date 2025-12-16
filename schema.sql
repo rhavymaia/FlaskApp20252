@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS tb_instituicao (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         codigo TEXT NOT NULL,
         nome TEXT NOT NULL,
         co_uf INTEGER NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS tb_instituicao (
 );
 
 CREATE TABLE IF NOT EXISTS tb_usuario (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         nome TEXT NOT NULL,
         cpf TEXT NOT NULL,
         nascimento DATE NOT NULL
