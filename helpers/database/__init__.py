@@ -17,7 +17,6 @@ def get_conn():
             port="5434"
         )
 
-        # conn.row_factory = make_dicts
     return conn
 
 
