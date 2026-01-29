@@ -5,10 +5,13 @@ from helpers.database import get_conn
 from helpers.logging import logger
 
 from resources.HomeResource import HomeResources
-from resources.UsuariosResource import UsuariosResource
+from resources.UsuariosResource import UsuariosResource, UsuarioResource
 
 api.add_resource(HomeResources, '/')
 api.add_resource(UsuariosResource, '/usuarios')
+api.add_resource(UsuarioResource, '/usuarios/<string:id>')
+
+# TODO: Implementar a migração para flask-restful
 
 
 @app.get("/instituicoesensino")
@@ -42,6 +45,8 @@ def getInstituicoesEnsino():
     except sqlite3.Error as e:
         logger.error(f"An SQLite error occurred: {e}")
         return {"mensagem": "Problema na operação com os dados"}, 500
+
+# TODO: Implementar a migração para flask-restful
 
 
 @app.get("/instituicoesensino/<int:id>")

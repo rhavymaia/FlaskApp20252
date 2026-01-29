@@ -6,6 +6,7 @@ from marshmallow import ValidationError
 from helpers.logging import logger
 from helpers.database import get_conn
 from models.Usuario import UsuarioSchema
+Resource
 
 
 class UsuariosResource(Resource):
@@ -64,11 +65,15 @@ class UsuariosResource(Resource):
 
             # consultar: execução da dml.
             statement = "INSERT INTO tb_usuario (nome, cpf, nascimento) VALUES (%s, %s, %s) RETURNING id;"
-            cursor.execute(statement, (nome, cpf, nascimento))
+
+            valores = (nome, cpf, nascimento)
+            cursor.execute(statement, valores)
 
             # id = cursor.lastrowid
             row = cursor.fetchone()
             id = row[0]
+
+            conn.commit()
 
             # Adicionar id do registro criado ao usuário de rotorno.
             usuarioJson.update({"id": id})
@@ -80,3 +85,44 @@ class UsuariosResource(Resource):
         except Error as e:
             logger.error(f"An SQLite error occurred: {e}")
             return {"mensagem": "Problema na operação com os dados"}, 500
+
+
+class UsuarioResource(Resource):
+    def get(self, id):
+        logger.info(f"get - /usuario/{id}")
+        try:
+            # conectar com o banco.
+            conn = get_conn()
+
+            # capturar o cursor
+            cursor = conn.cursor()
+
+            # consultar: execução da dml.
+            statement = f"SELECT * FROM tb_usuario WHERE id = {id}"
+            cursor.execute(statement)
+
+            # fetch
+            row = cursor.fetchone()
+
+            if row:
+                id = row[0]
+                codigo = row[1]
+                nome = row[2]
+
+                instituicaoEnsino = {"id": id, "codigo": codigo, "nome": nome}
+            else:
+                return {"mensagem": "Não encontrado!"}, 404
+
+            return instituicaoEnsino, 200
+
+        except Error as e:
+            logger.error(f"An SQL error occurred: {e}")
+            return {"mensagem": "Problema na operação com os dados"}, 500
+
+    # TODO: Implementar
+    def put(self, id):
+        pass
+
+    # TODO: Implementar
+    def delete(self, id):
+        pass
