@@ -1,7 +1,7 @@
 import sqlite3
 
 from helpers.application import app, api
-from helpers.database import get_conn
+from helpers.database import db, get_conn
 from helpers.logging import logger
 
 from resources.HomeResource import HomeResources
@@ -52,3 +52,7 @@ def getInstituicoesEnsino():
 @app.get("/instituicoesensino/<int:id>")
 def getInstituicoesEnsinoById(id: int):
     return {}, 501
+
+
+with app.app_context():
+    db.create_all()

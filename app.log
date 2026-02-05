@@ -1,0 +1,46 @@
+2025-11-25 16:40:52,868 - INFO - get - /usuarios
+2025-11-25 16:40:52,874 - INFO - João - 00011122233 - 2025-11-25
+2025-11-25 16:40:52,875 - ERROR - An SQLite error occurred: table tb_instituicao has no column named cpf
+2025-12-02 16:34:35,602 - INFO - get - /instituicoesensino
+2025-12-02 16:34:40,818 - INFO - get - /instituicoesensino
+2025-12-02 16:37:05,364 - INFO - get - /instituicoesensino
+2025-12-16 16:25:50,372 - INFO - get - /usuarios
+2025-12-16 16:26:32,896 - INFO - get - /usuarios
+2025-12-16 16:27:05,731 - INFO - get - /usuarios
+2025-12-16 16:27:42,663 - INFO - get - /usuarios
+2025-12-16 16:28:49,643 - INFO - get - /usuarios
+2026-01-27 16:33:48,061 - INFO - get - /usuarios
+2026-01-27 16:33:48,106 - INFO - João - 00011122233 - 2025-11-25
+2026-01-27 16:33:48,110 - ERROR - An SQLite error occurred: syntax error at or near ","
+LINE 1: ...T INTO tb_instituicao(nome, cpf, nascimento) values(?, ?, ?)
+                                                                ^
+
+2026-01-27 16:36:05,341 - INFO - get - /usuarios
+2026-01-27 16:45:24,778 - INFO - get - /usuarios
+2026-01-27 16:45:24,835 - INFO - Maria - 00011122233 - 2025-11-25
+2026-01-27 16:46:16,794 - INFO - get - /usuarios
+2026-01-27 16:46:16,836 - INFO - Maria - 00011122233 - 2025-11-25
+2026-01-27 16:46:28,860 - INFO - get - /usuarios
+2026-01-27 16:46:31,604 - INFO - get - /usuarios
+2026-01-27 16:46:32,318 - INFO - get - /usuarios
+2026-01-27 16:46:32,630 - INFO - get - /usuarios
+2026-01-27 16:46:32,916 - INFO - get - /usuarios
+2026-01-27 16:46:33,296 - INFO - get - /usuarios
+2026-01-27 16:46:33,582 - INFO - get - /usuarios
+2026-01-27 16:50:20,106 - INFO - get - /usuarios
+2026-01-27 16:50:20,170 - INFO - Maria - 00011122233 - 2025-11-25
+2026-01-29 15:30:27,633 - INFO - get - /usuarios
+2026-01-29 15:30:27,678 - INFO - Maria - 00011122233 - 2025-11-25
+2026-01-29 15:31:08,208 - INFO - get - /usuarios
+2026-01-29 15:38:14,147 - INFO - get - /usuarios
+2026-01-29 15:38:14,202 - INFO - Maria - 00011122233 - 2025-11-25
+2026-01-29 15:39:56,232 - INFO - get - /usuarios
+2026-01-29 15:39:56,264 - INFO - Maria - 00011122233 - 2025-11-25
+2026-01-29 15:40:13,649 - INFO - get - /usuarios
+2026-01-29 15:58:04,808 - INFO - get - /usuarios
+2026-01-29 15:58:12,679 - INFO - get - /usuario/1
+2026-01-29 15:58:17,951 - INFO - get - /usuario/2
+2026-01-29 15:58:22,452 - INFO - get - /usuario/3
+2026-01-29 15:58:24,624 - INFO - get - /usuario/3000
+2026-01-29 15:58:29,702 - INFO - get - /usuario/7
+2026-02-05 16:32:07,035 - INFO - get - /usuario/7

@@ -5,7 +5,7 @@ from marshmallow import ValidationError
 
 from helpers.logging import logger
 from helpers.database import get_conn
-from models.Usuario import UsuarioSchema
+from models.Usuario import Usuario, UsuarioSchema
 Resource
 
 
@@ -29,12 +29,13 @@ class UsuariosResource(Resource):
             usuariosEnsinoResponse = []
             for row in resultset:
                 id = row[0]
-                codigo = row[1]
-                nome = row[2]
+                nome = row[1]
+                cpf = row[2]
+                nascimento = row[3]
 
-                instituicaoEnsino = {"id": id, "codigo": codigo, "nome": nome}
+                usuario = Usuario(id, nome, cpf, nascimento)
 
-                usuariosEnsinoResponse.append(instituicaoEnsino)
+                usuariosEnsinoResponse.append(usuario.to_json())
 
             return usuariosEnsinoResponse, 200
 
@@ -83,7 +84,7 @@ class UsuariosResource(Resource):
         except ValidationError as err:
             return err.messages, 400
         except Error as e:
-            logger.error(f"An SQLite error occurred: {e}")
+            logger.error(f"An SQL error occurred: {e}")
             return {"mensagem": "Problema na operação com os dados"}, 500
 
 

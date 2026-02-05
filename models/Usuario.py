@@ -1,7 +1,17 @@
 from marshmallow import Schema, fields, validate
+from sqlalchemy.orm import Mapped, mapped_column
+
+from helpers.database import db
 
 
-class Usuario():
+class Usuario(db.Model):
+
+    __tablename__ = "tb_usuario"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nome: Mapped[str]
+    cpf: Mapped[str]
+    nascimento: Mapped[str]
+
     def __init__(self, id, nome, cpf, nascimento):
         self.id = id
         self.nome = nome
