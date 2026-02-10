@@ -1,3 +1,4 @@
+from models.Endereco import Endereco
 from flask import request
 from flask_restful import Resource
 from psycopg2 import Error

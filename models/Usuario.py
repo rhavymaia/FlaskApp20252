@@ -1,5 +1,7 @@
+from typing import List
 from marshmallow import Schema, fields, validate
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String
 
 from helpers.database import db
 
@@ -8,9 +10,13 @@ class Usuario(db.Model):
 
     __tablename__ = "tb_usuario"
     id: Mapped[int] = mapped_column(primary_key=True)
-    nome: Mapped[str]
+    nome: Mapped[str] = mapped_column("nm_usuario", String(180))
     cpf: Mapped[str]
     nascimento: Mapped[str]
+
+    enderecos: Mapped[List["Endereco"]] = relationship(
+        back_populates="usuario", cascade="all, delete-orphan"
+    )
 
     def __init__(self, id, nome, cpf, nascimento):
         self.id = id
